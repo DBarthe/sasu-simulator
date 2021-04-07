@@ -30,6 +30,10 @@ export interface Salaire {
   cotisation: Cotisation
 }
 
+export interface SalairesDict {
+  [brut: number]: Salaire
+}
+
 export interface Cotisation {
   total: number
   partSalariale: number

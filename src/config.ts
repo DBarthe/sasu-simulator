@@ -17,3 +17,8 @@ export const configDividende = {
   abattement: 0.4,
   csgDeductible: 0.068
 }
+
+export const configSalaires = {
+  brutMax: 100000,
+  brutInterval: 500
+}

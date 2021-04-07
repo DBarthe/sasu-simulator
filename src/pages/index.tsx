@@ -4,17 +4,23 @@ import Header from '../components/Header';
 import SimulationForm from '../components/SimulationForm';
 import * as Comlink from 'comlink'
 import { WorkerApi } from '../worker';
-import { SimulationOutput } from '../models';
+import { Salaire, SalairesDict, SimulationOutput } from '../models';
 import ResultsTable from '../components/ResultsTable';
 import styles from '../styles/Index.module.css'
+import { calculateAllSalaires } from '../core';
 
 
-export default function Home() {
+interface HomeProps {
+  salairesDict: SalairesDict
+}
+
+
+export default function Home({ salairesDict }: HomeProps) {
 
 
   const [output, setOutput] = useState<SimulationOutput>(null)
   const tableRef = useRef(null);
-  const formRef  = useRef(null);
+  const formRef = useRef(null);
 
   const workerApiRef = useRef<Comlink.Remote<WorkerApi>>()
   useEffect(() => {
@@ -24,10 +30,10 @@ export default function Home() {
 
   const run = useCallback(async (input) => {
     setOutput(null)
-    const newOutput = await workerApiRef.current.run(input);
+    const newOutput = await workerApiRef.current.run(input, salairesDict);
     setOutput(newOutput)
     tableRef?.current.scrollIntoView()
-  }, [setOutput, tableRef])
+  }, [setOutput, tableRef, salairesDict])
 
   const scrollDown = useCallback(() => {
     formRef?.current.scrollIntoView(formRef)
@@ -42,10 +48,8 @@ export default function Home() {
       </Head>
 
       <div className={styles.fixedBackgroudImage}></div>
-      <div className={styles.fixedBackgroudGradient}></div>
 
-
-      <Header onClickScrollDown={scrollDown}/>
+      <Header onClickScrollDown={scrollDown} />
       <div ref={formRef} className={styles.formContainer}>
         <SimulationForm onSubmit={run} />
       </div>
@@ -55,4 +59,30 @@ export default function Home() {
 
     </>
   )
+}
+
+
+function getCachedSalairesDict() {
+  const fs = require('fs')
+  const file = './salaires.json';
+
+  if (fs.existsSync(file)) {
+    const salaireDictJson = fs.readFileSync(file);
+    const salaireDict = JSON.parse(salaireDictJson);
+    return salaireDict;
+  }
+
+  const salaireDict = calculateAllSalaires()
+  const salaireDictJson = JSON.stringify(salaireDict)
+  fs.writeFileSync(file, salaireDictJson)
+  return salaireDict;
+}
+
+export async function getStaticProps(): Promise<{ props: HomeProps }> {
+
+  return {
+    props: {
+      salairesDict: getCachedSalairesDict()
+    }
+  }
 }

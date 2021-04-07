@@ -1,7 +1,7 @@
 import Engine from "publicodes";
 import rules from "modele-social";
-import { configIS, configIR, configDividende } from "./config";
-import { ChiffreAffairesInput, ChiffreAffaires, FraisInput, Frais, SimulationInput, Salaire, Benefices, Dividendes, Impots, SimulationOutputItem, SimulationOutput } from "./models";
+import { configIS, configIR, configDividende, configSalaires } from "./config";
+import { ChiffreAffairesInput, ChiffreAffaires, FraisInput, Frais, SimulationInput, Salaire, Benefices, Dividendes, Impots, SimulationOutputItem, SimulationOutput, SalairesDict } from "./models";
 
 export function calculateCa(caInput: ChiffreAffairesInput): ChiffreAffaires {
   return {
@@ -156,43 +156,7 @@ function calculateDividendesFlatTaxe(depuisBenefice: number, depuisReserve: numb
   }
 }
 
-function runSimulationItem(input: SimulationInput, salaireBrut: number, engine: Engine): SimulationOutputItem {
-
-  let salaire: Salaire;
-  if (salaireBrut === 0) {
-    salaire = {
-      superBrut: 0,
-      brut: 0,
-      net: 0,
-      cotisation: {
-        total: 0,
-        partPatronale: 0,
-        partSalariale: 0
-      },
-      netFiscal: 0
-    };
-  }
-  else {
-
-    engine
-      .setSituation({
-        "contrat salarié . rémunération . brut": `${salaireBrut} €/an`,
-        "dirigeant": "'assimilé salarié'",
-        "contrat salarié . activité partielle": "non"
-      })
-
-    salaire = {
-      superBrut: round2dec(evaluateEurPerMonth(engine, "contrat salarié . rémunération . total")),
-      brut: salaireBrut,
-      net: round2dec(evaluateEurPerMonth(engine, "contrat salarié . rémunération . net")),
-      cotisation: {
-        total: round2dec(evaluateEurPerMonth(engine, "contrat salarié . cotisations")),
-        partPatronale: round2dec(evaluateEurPerMonth(engine, "contrat salarié . cotisations . patronales")),
-        partSalariale: round2dec(evaluateEurPerMonth(engine, "contrat salarié . cotisations . salariales"))
-      },
-      netFiscal: round2dec(evaluateEurPerMonth(engine, "contrat salarié . rémunération . net imposable"))
-    };
-  }
+function runSimulationItem(input: SimulationInput, salaire : Salaire): SimulationOutputItem {
 
   const benefices = calculateBenefices(input, salaire)
 
@@ -230,29 +194,71 @@ function runSimulationItem(input: SimulationInput, salaireBrut: number, engine: 
   }
 }
 
-
-export function runSimulation(input: SimulationInput): SimulationOutput {
+export function runSimulation(input: SimulationInput, salairesDict: SalairesDict): SimulationOutput {
 
   const minimumBeneficeBrut = Math.ceil(calculateInverseIS(input.reserve.total))
   const superBrutMax = input.ca.total - input.frais.total - minimumBeneficeBrut
 
-  const engine = new Engine(rules);
-  engine
-    .setSituation({
-      "contrat salarié . rémunération . total": `${superBrutMax} €/an`,
-      "dirigeant": "'assimilé salarié'",
-      "contrat salarié . activité partielle": "non"
-    })
-    .setOptions
-  const brutMax = Math.floor(evaluateEurPerMonth(engine, "contrat salarié . rémunération . brut"))
-
-  const interval = 1000;
-  const items = [];
-  for (let brut = 0; brut < brutMax + interval; brut += interval) {
-    items.push(runSimulationItem(input, Math.min(brutMax, brut), engine))
+  const items = [];  
+  let brut = 0;
+  let salaire = salairesDict[brut]
+  while (salaire.superBrut <= superBrutMax) {
+    items.push(runSimulationItem(input, salaire))
+    brut += configSalaires.brutInterval;
+    salaire = salairesDict[brut]
   }
 
   return {
     items
   }
+}
+
+
+function calculateSalaire(brut: number, engine: Engine) : Salaire {
+  if (brut === 0) {
+    return {
+      superBrut: 0,
+      brut: 0,
+      net: 0,
+      cotisation: {
+        total: 0,
+        partPatronale: 0,
+        partSalariale: 0
+      },
+      netFiscal: 0
+    };
+  }
+
+    engine
+      .setSituation({
+        "contrat salarié . rémunération . brut": `${brut} €/an`,
+        "dirigeant": "'assimilé salarié'",
+        "contrat salarié . activité partielle": "non"
+      })
+
+    return {
+      superBrut: round2dec(evaluateEurPerMonth(engine, "contrat salarié . rémunération . total")),
+      brut: brut,
+      net: round2dec(evaluateEurPerMonth(engine, "contrat salarié . rémunération . net")),
+      cotisation: {
+        total: round2dec(evaluateEurPerMonth(engine, "contrat salarié . cotisations")),
+        partPatronale: round2dec(evaluateEurPerMonth(engine, "contrat salarié . cotisations . patronales")),
+        partSalariale: round2dec(evaluateEurPerMonth(engine, "contrat salarié . cotisations . salariales"))
+      },
+      netFiscal: round2dec(evaluateEurPerMonth(engine, "contrat salarié . rémunération . net imposable"))
+    };
+}
+
+export function calculateAllSalaires() : SalairesDict {
+
+  const engine = new Engine(rules);
+
+  const dict : SalairesDict = {};
+
+
+  for (let brut = 0; brut <= configSalaires.brutMax; brut += configSalaires.brutInterval) {
+    dict[brut] = calculateSalaire(brut, engine)   
+  }
+
+  return dict;
 }
