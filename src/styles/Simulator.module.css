@@ -1,0 +1,74 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container > div {
+  max-width: 500px;
+}
+
+.containerResults {
+  padding: 0 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-wrap: wrap;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.verticalContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontalContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.labelInputGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.labelInputGroup > label {
+  margin-right: 10px;
+}
+.labelOutputGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+table.resultsTable {
+  border-collapse: collapse;
+}
+
+.resultsTable > tbody > tr > td, .resultsTable > thead > tr > th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+table.innerTable {
+  border-collapse: collapse; 
+  width: 100%;
+  font-size: 0.7em;
+}
+
+.innerTable > tbody > tr > td, .innerTable > thead > tr > th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.innerTable > tbody > tr > td.right {
+  text-align: right;
+}

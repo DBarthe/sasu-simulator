@@ -1,0 +1,13 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  --courier-font: 'Courier Prime', 'Courier New', Courier, monospace;
+  --mono-font: 'Roboto Mono';
+  --border-color: rgba(24, 58, 91, 0.5);
+  --input-border-color: rgba(24, 58, 91, 0.5);
+  --number-color: rgb(7, 40, 226);
+
+  font-family: var(--courier-font);
+}

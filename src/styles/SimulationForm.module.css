@@ -1,0 +1,172 @@
+
+
+.container {
+
+
+  min-width: 80vw;
+  min-height: 80vh;
+  display: grid;
+  grid-template-columns:  minmax(0, 0.5fr) minmax(0, 1fr) minmax(0, 1fr);
+
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header header header"
+    "p-header p-1 p-3"
+    "p-header p-2 p-4"
+    "p-header p-total p-total"
+    "c-header c-1 c-2"
+    "c-header c-total c-total"
+    "b-header b-1 button"
+    "b-header b-2 button"
+    "i-header i-1 button";
+
+  font-family: var(--courier-font);
+  font-size: 1em;
+  background-color: rgb(164, 207, 212);
+  /* padding: 0px 20px 20px 20px; */
+  border: 1px solid var(--border-color);
+  box-shadow: 0px 0px 50px var(--border-color);
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.item {
+  border: none;
+}
+
+.header {
+  text-transform: uppercase;
+  font-size: 1.2em;
+  display: flex;
+  justify-content: center;
+}
+
+.header > h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.itemInput {
+  padding: 10px 20px 5px 20px;
+}
+
+.pHeader, .cHeader, .bHeader, .iHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-size: 1.2em;
+
+}
+
+.borderBottom, 
+.item:not(.iHeader, .i1, .itemButton) {
+  border-bottom: 2px solid var(--border-color);
+}
+
+.borderTop, 
+.pHeader, .p1, .p3 {
+  border-top: 2px solid var(--border-color);
+}
+
+.borderRight,
+.item:not(.header, .p3, .p4, .pTotal, .c2, .cTotal, .itemButton) {
+
+  border-right: 2px solid var(--border-color);
+}
+
+
+.label {
+  display: flex;
+  flex-direction: column;
+  cursor: text;
+}
+
+.inputTitle {
+  text-transform: uppercase;
+}
+
+
+.inputWrapper {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.input {
+  flex: 1 1 0%;
+  border: none;
+  background-color: transparent;
+  min-width: 0;
+}
+
+.input:focus-visible {
+  outline: 2px dotted var(--input-border-color);
+}
+
+.input.invalid, .inputTitle.invalid {
+  color: red;
+}
+
+.number {
+  font-size: 1.3em;
+  font-family: var(--mono-font);
+  color: var(--number-color)
+}
+
+.inputUnit {
+  align-self: center;
+}
+
+
+
+.pTotal, .cTotal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 50%;
+}
+
+.valueDisplayWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.valueDisplayTitle {
+  text-transform: uppercase;
+}
+
+.itemButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  background-color: rgb(233, 233, 233);
+  color: inherit;
+  border: 2px solid var(--border-color);
+  box-shadow: 3px 3px 3px var(--border-color);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.5em;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.button:hover {
+  box-shadow: 5px 5px 5px var(--border-color);
+
+}
