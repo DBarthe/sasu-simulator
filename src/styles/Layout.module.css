@@ -1,0 +1,17 @@
+.fixedBackgroudImage {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url("/cover.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -2;
+}
+
+.content {
+    display: flex;
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+}

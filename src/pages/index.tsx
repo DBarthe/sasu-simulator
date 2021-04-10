@@ -22,6 +22,8 @@ export default function Home({ salairesDict }: HomeProps) {
   const tableRef = useRef(null);
   const formRef = useRef(null);
 
+  
+
   const workerApiRef = useRef<Comlink.Remote<WorkerApi>>()
   useEffect(() => {
     workerApiRef.current = Comlink.wrap<WorkerApi>(new Worker(new URL('../worker.ts', import.meta.url)))

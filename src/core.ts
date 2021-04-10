@@ -1,22 +1,8 @@
 import Engine from "publicodes";
 import rules from "modele-social";
 import { configIS, configIR, configDividende, configSalaires } from "./config";
-import { ChiffreAffairesInput, ChiffreAffaires, FraisInput, Frais, SimulationInput, Salaire, Benefices, Dividendes, Impots, SimulationOutputItem, SimulationOutput, SalairesDict } from "./models";
+import { SimulationSettings, Salaire, Benefices, Dividendes, Impots, SimulationOutputItem, SimulationOutput, SalairesDict } from "./models";
 
-export function calculateCa(caInput: ChiffreAffairesInput): ChiffreAffaires {
-  return {
-    total:
-      caInput.tjm * caInput.joursParMois * 12 +
-      caInput.autreMensuel * 12 +
-      caInput.autreAnnuel
-  }
-}
-
-export function calculateFrais(fraisInput: FraisInput): Frais {
-  return {
-    total: fraisInput.annuel + fraisInput.mensuel * 12
-  }
-}
 
 function round2dec(num: number): number {
   return Math.round((num));
@@ -53,9 +39,9 @@ function calculateInverseIS(net: number): number {
 
 
 
-function calculateBenefices(input: SimulationInput, salaire: Salaire): Benefices {
+function calculateBenefices(settings: SimulationSettings, salaire: Salaire): Benefices {
 
-  const brut = input.ca.total - input.frais.total - salaire.superBrut
+  const brut = settings.ca.total - settings.frais.total - salaire.superBrut
   const net = round2dec(calculateIS(brut))
   const is = brut - net
   const taux = is / brut
@@ -66,10 +52,10 @@ function calculateBenefices(input: SimulationInput, salaire: Salaire): Benefices
 
 
 
-function calculateImpots(input: SimulationInput, salaire: Salaire, dividendes: Dividendes): Impots {
+function calculateImpots(settings: SimulationSettings, salaire: Salaire, dividendes: Dividendes): Impots {
 
-  const avant = salaire.net + dividendes.net + input.autresRevenusImposables
-  const imposable = salaire.netFiscal + dividendes.imposable + input.autresRevenusImposables
+  const avant = salaire.net + dividendes.net + settings.autresRevenusImposables
+  const imposable = salaire.netFiscal + dividendes.imposable + settings.autresRevenusImposables
 
   const [tranche1, tranche2, tranche3, tranche4] = configIR.tranches
   const [taux1, taux2, taux3, taux4, taux5] = configIR.taux
@@ -97,7 +83,7 @@ function calculateImpots(input: SimulationInput, salaire: Salaire, dividendes: D
   const apres = avant - montant
 
   return {
-    autreImposable: input.autresRevenusImposables,
+    autreImposable: settings.autresRevenusImposables,
     avant,
     imposable,
     montant,
@@ -156,20 +142,20 @@ function calculateDividendesFlatTaxe(depuisBenefice: number, depuisReserve: numb
   }
 }
 
-function runSimulationItem(input: SimulationInput, salaire : Salaire): SimulationOutputItem {
+function runSimulationItem(settings: SimulationSettings, salaire : Salaire): SimulationOutputItem {
 
-  const benefices = calculateBenefices(input, salaire)
+  const benefices = calculateBenefices(settings, salaire)
 
   const reserve = {
-    total: Math.min(input.reserve.total, benefices.brut)
+    total: Math.min(settings.reserve.total, benefices.brut)
   }
 
   const dividendesDepuisBenefice = benefices.net - reserve.total
-  const dividendesOptFlatTaxe = calculateDividendesFlatTaxe(dividendesDepuisBenefice, input.dividendesReserve)
-  const dividendesOptProg = calculateDividendesBaremeProg(dividendesDepuisBenefice, input.dividendesReserve)
+  const dividendesOptFlatTaxe = calculateDividendesFlatTaxe(dividendesDepuisBenefice, settings.dividendesReserve)
+  const dividendesOptProg = calculateDividendesBaremeProg(dividendesDepuisBenefice, settings.dividendesReserve)
 
-  const impotsOptFlatTaxe = calculateImpots(input, salaire, dividendesOptFlatTaxe)
-  const impotsOptProg = calculateImpots(input, salaire, dividendesOptProg)
+  const impotsOptFlatTaxe = calculateImpots(settings, salaire, dividendesOptFlatTaxe)
+  const impotsOptProg = calculateImpots(settings, salaire, dividendesOptProg)
 
   let dividendes, impots;
   if (impotsOptProg.apres > impotsOptFlatTaxe.apres) {
@@ -183,27 +169,27 @@ function runSimulationItem(input: SimulationInput, salaire : Salaire): Simulatio
   dividendes.optionDifference = Math.abs(impotsOptProg.apres - impotsOptFlatTaxe.apres)
 
   return {
-    ca: input.ca,
-    frais: input.frais,
+    ca: settings.ca,
+    frais: settings.frais,
     salaire,
     benefices,
     reserve,
     dividendes,
     impots,
-    rendement: impots.apres / input.ca.total
+    rendement: impots.apres / settings.ca.total
   }
 }
 
-export function runSimulation(input: SimulationInput, salairesDict: SalairesDict): SimulationOutput {
+export function runSimulation(settings: SimulationSettings, salairesDict: SalairesDict): SimulationOutput {
 
-  const minimumBeneficeBrut = Math.ceil(calculateInverseIS(input.reserve.total))
-  const superBrutMax = input.ca.total - input.frais.total - minimumBeneficeBrut
+  const minimumBeneficeBrut = Math.ceil(calculateInverseIS(settings.reserve.total))
+  const superBrutMax = settings.ca.total - settings.frais.total - minimumBeneficeBrut
 
   const items = [];  
   let brut = 0;
   let salaire = salairesDict[brut]
-  while (salaire.superBrut <= superBrutMax) {
-    items.push(runSimulationItem(input, salaire))
+  while (salaire && salaire.superBrut <= superBrutMax) {
+    items.push(runSimulationItem(settings, salaire))
     brut += configSalaires.brutInterval;
     salaire = salairesDict[brut]
   }

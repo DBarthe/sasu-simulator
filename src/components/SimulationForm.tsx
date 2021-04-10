@@ -5,7 +5,7 @@ import React, { InputHTMLAttributes } from 'react'
 import styles from '../styles/SimulationForm.module.css'
 import Loader from './Loader'
 import { TypeOf } from 'yup';
-import { SimulationInput, SimulationOutput } from '../models';
+import { SimulationSettings, SimulationOutput } from '../models';
 
 interface ValueInputProps {
   name: string
@@ -67,7 +67,7 @@ function computeFrais(values: TypeOf<typeof FormSchema>): number {
   return values.fraisAnnuels + values.fraisMensuels * 12
 }
 
-function convertValuesToSimulationInput(values: TypeOf<typeof FormSchema>): SimulationInput {
+function convertValuesToSimulationInput(values: TypeOf<typeof FormSchema>): SimulationSettings {
   return {
     ca: {
       total: computeCa(values)

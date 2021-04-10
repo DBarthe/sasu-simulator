@@ -1,18 +1,3 @@
-export interface ChiffreAffairesInput {
-  tjm: number;
-  joursParMois: number;
-  autreMensuel: number;
-  autreAnnuel: number;
-}
-
-export interface FraisInput {
-  mensuel: number
-  annuel: number
-}
-
-export interface SalaireInput {
-  percent: number
-}
 
 export interface ChiffreAffaires {
   total: number
@@ -44,7 +29,7 @@ export interface Reserve {
   total: number
 }
 
-export interface SimulationInput {
+export interface SimulationSettings {
   ca: ChiffreAffaires
   frais: Frais
   reserve: Reserve

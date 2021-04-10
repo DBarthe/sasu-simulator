@@ -1,0 +1,10 @@
+:root {
+  --courier-font: 'Courier Prime', 'Courier New', Courier, monospace;
+  --mono-font: 'Roboto Mono', monospace;
+  --font: var(--courier-font);
+
+  
+  --border-color: rgba(24, 58, 91, 0.5);
+  --input-border-color: rgba(24, 58, 91, 0.5);
+  --number-color: rgb(7, 40, 226);
+}
