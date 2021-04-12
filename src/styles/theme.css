@@ -1,7 +1,11 @@
 :root {
   --courier-font: 'Courier Prime', 'Courier New', Courier, monospace;
   --mono-font: 'Roboto Mono', monospace;
-  --font: var(--courier-font);
+  --font: var(--mono-font);
+
+
+  --color: white;
+  --color-disabled: gray;
 
   
   --border-color: rgba(24, 58, 91, 0.5);

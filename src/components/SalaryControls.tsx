@@ -1,20 +1,45 @@
-import { SimulationSettings } from "../models";
+import { useEffect } from "react";
+import { configSalaires } from "../config";
+import { formatEuroNoUnit } from "../utils";
+import styles from "../styles/SalaryControls.module.css";
 
 interface SalaryControlsProps {
-  settings: SimulationSettings
-  current: number
-  setCurrent: (value: number) => any
-  max: number
+  max: number;
+  current: number;
+  setCurrent: (value: number) => any;
+  displayMonthly: boolean;
 }
 
-export default function SalaryControls({settings, max, current, setCurrent} : SalaryControlsProps) {
+export default function SalaryControls({
+  max,
+  current,
+  setCurrent,
+  displayMonthly,
+}: SalaryControlsProps) {
+  // when the max changed, ensure the current brut is below or equal
+  useEffect(() => {
+    if (current > max) {
+      setCurrent(max);
+    }
+  }, [max]);
 
-  return <>
-    <label>Salaire brut
-      <input 
+  return (
+    <div className={styles.container}>
+      <div className={styles.title}>Salaire brut</div>
+
+      <input
+        className={styles.input}
+        type="range"
+        min={0}
+        max={max}
         value={current}
-      
+        step={configSalaires.brutInterval}
+        onChange={(event) => setCurrent(+event.target.value)}
       />
-    </label>
-  </>  
+      <div className={styles.amount}>
+        {formatEuroNoUnit(displayMonthly ? current / 12 : current)}
+      </div>
+      <div className={styles.unit}>€/{displayMonthly ? "mois" : "an"}</div>
+    </div>
+  );
 }

@@ -1,7 +1,19 @@
 .container {
-
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .invalid {
   color: red;
+}
+
+
+.group {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 0px;
+  flex-grow: 1;
+  flex-shrink: 1;
 }

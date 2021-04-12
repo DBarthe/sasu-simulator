@@ -81,4 +81,5 @@ export interface SimulationOutputItem {
 
 export interface SimulationOutput {
   items: SimulationOutputItem[]
+  itemsByBrut: {[brut: number]: SimulationOutputItem}
 }

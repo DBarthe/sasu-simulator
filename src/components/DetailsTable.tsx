@@ -6,6 +6,7 @@ import { formatEuro, formatPercent } from "../utils";
 
 
 export default function DetailsTable(props: { item: SimulationOutputItem; }) {
+  console.log("details table")
   const { item } = props;
   return (
     <>

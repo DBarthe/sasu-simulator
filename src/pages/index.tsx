@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import SimulationForm from '../components/SimulationForm';
 import * as Comlink from 'comlink'
 import { WorkerApi } from '../worker';
-import { Salaire, SalairesDict, SimulationOutput } from '../models';
+import { SalairesDict, SimulationOutput } from '../models';
 import ResultsTable from '../components/ResultsTable';
 import styles from '../styles/Index.module.css'
 import { calculateAllSalaires } from '../core';
@@ -22,7 +22,7 @@ export default function Home({ salairesDict }: HomeProps) {
   const tableRef = useRef(null);
   const formRef = useRef(null);
 
-  
+
 
   const workerApiRef = useRef<Comlink.Remote<WorkerApi>>()
   useEffect(() => {

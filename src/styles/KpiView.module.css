@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: blue solid 1px;
+  padding: 10px 0px;
+  margin: 10px;
+}
+
+.kpiCardTitle {
+  font-size: 1.2em;
+
+}
+
+.kpiCardValue {
+  font-size: 2em;
+}
+
+.kpiCardUnit {
+
+}

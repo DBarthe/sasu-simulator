@@ -1,9 +1,10 @@
 import classNames from "classnames";
-import { InputHTMLAttributes, useState, useCallback, useEffect } from "react";
+import React, { InputHTMLAttributes, useState, useCallback, useEffect } from "react";
 import * as Yup from "yup";
 import { TypeOf } from "yup";
 import { SimulationSettings } from "../models";
 import styles from "../styles/SettingsControls.module.css";
+import Switch, { SwitchPosition } from "./Switch";
 
 const schema = Yup.object().shape({
   tjm: Yup.number().min(0).required(),
@@ -45,6 +46,7 @@ function ValueInput({
         </div>
         <div className={styles.inputWrapper}>
           <input
+            type="number"
             className={classNames(
               styles.input,
               styles.number,
@@ -93,9 +95,11 @@ function convertValuesToSettings(
 
 interface SettingsControlsProps {
   onChange: (input: SimulationSettings | null) => any;
+  displayMonthly: boolean;
+  setDisplayMonthly: (value: boolean) => any
 }
 
-export default function SettingsControls({ onChange }: SettingsControlsProps) {
+export default function SettingsControls({ onChange, displayMonthly, setDisplayMonthly }: SettingsControlsProps) {
   const [values, setValues] = useState({
     tjm: 400,
     joursParMois: 18,
@@ -156,15 +160,48 @@ export default function SettingsControls({ onChange }: SettingsControlsProps) {
 
   return (
     <div className={styles.container}>
-      {inputShorthand("tjm", "Taux journalier", "€/jour")}
-      {inputShorthand("joursParMois", "Nombre de jours", "jour/mois")}
-      {inputShorthand("autresRevenusAnnuels", "Autres gains annuels", "€/an")}
-      {inputShorthand("autresRevenusMensuels", "Autres gains mensuels", "€/mois")}
-      {inputShorthand("fraisAnnuels", "Frais annuels", "€/an")}
-      {inputShorthand("fraisMensuels", "Frais mensuels", "€/mois")}
-      {inputShorthand("miseEnReserve", "Montant à mettre en réserve à la fin de l'exercice", "€")}
-      {inputShorthand("dividendesReserve", "Dividende pris sur la réserve des années précédentes", "€")}
-      {inputShorthand("autresRevenusImposables", "Autres revenus imposables", "€/an")}
+      <div className={styles.group}>
+        {inputShorthand("tjm", "Taux journalier", "€/jour")}
+        {inputShorthand("joursParMois", "Nombre de jours", "jour/mois")}
+      </div>
+
+      <div className={styles.group}>
+        {inputShorthand("autresRevenusAnnuels", "Autres gains annuels", "€/an")}
+        {inputShorthand(
+          "autresRevenusMensuels",
+          "Autres gains mensuels",
+          "€/mois"
+        )}
+      </div>
+
+      <div className={styles.group}>
+        {inputShorthand("fraisAnnuels", "Frais annuels", "€/an")}
+        {inputShorthand("fraisMensuels", "Frais mensuels", "€/mois")}
+      </div>
+
+      <div className={styles.group}>
+        {inputShorthand("miseEnReserve", "Mise en réserve", "€")}
+        {inputShorthand(
+          "dividendesReserve",
+          "Dividende pris sur la réserve",
+          "€"
+        )}
+      </div>
+
+      <div className={styles.group}>
+        {inputShorthand(
+          "autresRevenusImposables",
+          "Autres revenus imposables",
+          "€/an"
+        )}
+        <Switch
+          position={displayMonthly ? SwitchPosition.L : SwitchPosition.R}
+          setPosition={(position) => {
+            setDisplayMonthly(position === SwitchPosition.L);
+          }}
+          labels={["Mensuel", "Annuel"]}
+        />
+      </div>
     </div>
   );
 }
