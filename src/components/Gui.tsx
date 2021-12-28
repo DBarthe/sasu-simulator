@@ -11,6 +11,7 @@ import { WorkerApi } from "../worker";
 import DetailsTable from "./DetailsTable";
 import { KpiView } from "./KpiView";
 import { Controls } from "./Controls";
+import VisualizationView from "./VisualizationView";
 
 interface MainGuiProps {
   salairesDict: SalairesDict;
@@ -77,18 +78,18 @@ export default function MainGui({ salairesDict }: MainGuiProps) {
       />
       <div className={styles.viewContainer}>
         <div className={styles.kpiContainer}>
-          {currentItem && (
+          {currentItem ? (
             <KpiView item={currentItem} displayMonthly={displayMonthly} />
+          ) : (
+            ""
           )}
         </div>
-        <div className={styles.visualizationContainer}></div>
+        <div className={styles.visualizationContainer}>
+          {output ? <VisualizationView output={output} currentBrut={currentBrut}/> : ""}
+        </div>
       </div>
       <div className={styles.detailsContainer}>
-        {currentItem ? (
-          <DetailsTable item={currentItem} />
-        ) : (
-          ""
-        )}
+        {currentItem ? <DetailsTable item={currentItem} /> : ""}
       </div>
     </div>
   );

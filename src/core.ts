@@ -11,6 +11,7 @@ import {
   SimulationOutput,
   SalairesDict,
 } from "./models";
+import { maxHeaderSize } from "node:http";
 
 function round2dec(num: number): number {
   return Math.round(num);
@@ -60,14 +61,23 @@ function calculateBenefices(
   };
 }
 
+function calculateDeductionFraisPro(netImposable: number) {
+  const deduction = netImposable * 0.1;
+
+  return Math.min(Math.max(deduction, configIR.deductionFraisProMin), configIR.deductionFraisProMax);
+}
+
 function calculateImpots(
   settings: SimulationSettings,
   salaire: Salaire,
   dividendes: Dividendes
 ): Impots {
   const avant = salaire.net + dividendes.net + settings.autresRevenusImposables;
+
+  const deductionFraisPro = calculateDeductionFraisPro(salaire.netFiscal);
+
   const imposable =
-    salaire.netFiscal + dividendes.imposable + settings.autresRevenusImposables;
+    salaire.netFiscal - deductionFraisPro + dividendes.imposable + settings.autresRevenusImposables;
 
   const [tranche1, tranche2, tranche3, tranche4] = configIR.tranches;
   const [taux1, taux2, taux3, taux4, taux5] = configIR.taux;
@@ -104,6 +114,7 @@ function calculateImpots(
 
   return {
     autreImposable: settings.autresRevenusImposables,
+    deductionFraisPro,
     avant,
     imposable,
     montant,

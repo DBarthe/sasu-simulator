@@ -10,13 +10,16 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  border: blue solid 1px;
+  /* border: blue solid 1px; */
+  border: #f5e324 1px solid;
+  border-radius: 2px;
   padding: 10px 0px;
   margin: 10px;
 }
 
 .kpiCardTitle {
   font-size: 1.2em;
+  text-align: center;
 
 }
 
@@ -27,3 +30,4 @@
 .kpiCardUnit {
 
 }
+

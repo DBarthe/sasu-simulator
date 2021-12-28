@@ -183,7 +183,7 @@ export default function SettingsControls({ onChange, displayMonthly, setDisplayM
         {inputShorthand("miseEnReserve", "Mise en réserve", "€")}
         {inputShorthand(
           "dividendesReserve",
-          "Dividende pris sur la réserve",
+          "Dividende pris sur la réserve antérieure",
           "€"
         )}
       </div>

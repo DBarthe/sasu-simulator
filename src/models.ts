@@ -61,6 +61,7 @@ export interface Dividendes {
 
 export interface Impots {
   autreImposable: number
+  deductionFraisPro: number
   avant: number
   imposable: number
   montant: number

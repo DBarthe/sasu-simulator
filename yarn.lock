@@ -423,6 +423,16 @@ chalk@4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+chart.js@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.1.1.tgz#2cdbda7fccea532313332fe822f0cae268f24cf3"
+  integrity sha512-ghNJersc9VD9MECwa5bL8gqvCkndW6RSCicdEHL9lIriNtXwKawlSmwo+u6KNXLYT2+f24GdFPBoynKW3ke4MQ==
+
+chartjs-plugin-annotation@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-annotation/-/chartjs-plugin-annotation-1.0.0.tgz#6d1b7f909bda2ed13f8012481a9484dfabdc77c3"
+  integrity sha512-muemrSFOTX5JZLYhJV8twbRfgxLbORUtaVFxV+9rL6e+jRA2zIX4Gebwg+o0HDzNgh4ylXTlbvLCBvvA+HAmHQ==
+
 chokidar@3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.1.tgz#ee9ce7bbebd2b79f49f304799d5468e31e14e68a"
@@ -1130,7 +1140,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.20:
+lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.19, lodash@^4.17.20:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -1898,6 +1908,13 @@ supports-color@^8.0.0:
   integrity sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==
   dependencies:
     has-flag "^4.0.0"
+
+test-react-chartjs-2@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/test-react-chartjs-2/-/test-react-chartjs-2-3.0.4.tgz#7699f23146b0525f0a77ff6d449ae5b9025b472e"
+  integrity sha512-/M0L87paeoepNh/kXk0eAJMZ8ysZjQDl9dd141Gy1qe2gnVtgIy1GCaco1sFSXVE7tJ36p+b5sEVjGNE7NabnA==
+  dependencies:
+    lodash "^4.17.19"
 
 timers-browserify@2.0.12, timers-browserify@^2.0.4:
   version "2.0.12"

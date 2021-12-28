@@ -7,7 +7,9 @@ export const configIS = {
 
 export const configIR = {
   tranches: [10084, 25710, 73516, 158122],
-  taux: [0, 0.11, 0.3, 0.41, 0.45]
+  taux: [0, 0.11, 0.3, 0.41, 0.45],
+  deductionFraisProMin: 442,
+  deductionFraisProMax: 12652  
 }
 
 export const configDividende = {
@@ -19,6 +21,6 @@ export const configDividende = {
 }
 
 export const configSalaires = {
-  brutMax: 100000,
+  brutMax: 500000,
   brutInterval: 500
 }

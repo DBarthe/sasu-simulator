@@ -1,7 +1,10 @@
 .container {
   display: flex;
   flex-direction: column;
-  border: green 1px solid;
+  /* border: green 1px solid; */
+  border: #f5e324 1px solid;
+  border-radius: 2px;
+  margin-top: 20px;
   padding: 20px;
 }
 
