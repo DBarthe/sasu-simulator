@@ -1,68 +1,23 @@
-import Head from 'next/head';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Header from '../components/Header';
-import SimulationForm from '../components/SimulationForm';
-import * as Comlink from 'comlink'
-import { WorkerApi } from '../worker';
-import { SalairesDict, SimulationOutput } from '../models';
-import ResultsTable from '../components/ResultsTable';
-import styles from '../styles/Index.module.css'
-import { calculateAllSalaires } from '../core';
-
+import Head from "next/head";
+import React from "react";
+import MainGui from "../components/Gui";
+import { calculateAllSalaires } from "../core";
+import { SalairesDict } from "../models";
 
 interface HomeProps {
   salairesDict: SalairesDict
 }
 
-
-export default function Home({ salairesDict }: HomeProps) {
-
-
-  const [output, setOutput] = useState<SimulationOutput>(null)
-  const tableRef = useRef(null);
-  const formRef = useRef(null);
-
-
-
-  const workerApiRef = useRef<Comlink.Remote<WorkerApi>>()
-  useEffect(() => {
-    workerApiRef.current = Comlink.wrap<WorkerApi>(new Worker(new URL('../worker.ts', import.meta.url)))
-  }, [])
-
-
-  const run = useCallback(async (input) => {
-    setOutput(null)
-    const newOutput = await workerApiRef.current.run(input, salairesDict);
-    setOutput(newOutput)
-    tableRef?.current.scrollIntoView()
-  }, [setOutput, tableRef, salairesDict])
-
-  const scrollDown = useCallback(() => {
-    formRef?.current.scrollIntoView(formRef)
-  }, [formRef])
-
+export default function Home({salairesDict}: HomeProps) {
   return (
     <>
       <Head>
         <title>Simulateur de SASU</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-
-      <div className={styles.fixedBackgroudImage}></div>
-
-      <Header onClickScrollDown={scrollDown} />
-      <div ref={formRef} className={styles.formContainer}>
-        <SimulationForm onSubmit={run} />
-      </div>
-      <div ref={tableRef}>
-        {output && <ResultsTable output={output} />}
-      </div>
-
+      <MainGui salairesDict={salairesDict}/>
     </>
-  )
+  );
 }
-
 
 function getCachedSalairesDict() {
   const fs = require('fs')
